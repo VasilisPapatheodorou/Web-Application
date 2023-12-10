@@ -21,7 +21,7 @@
     .then(data => {
       data.forEach(category => {
         const markup = `<li>${category.title}</li>`;
-        const img = `<li><a href=" ">${category.img_url}</a><li>`;//sosto ref
+        const img = `<li>${category.img_url}</a><li>`;//sosto ref
         document.querySelector('ul').insertAdjacentHTML('beforeend', markup);
         document.querySelector('ul').insertAdjacentHTML('beforeend', img);
       });
