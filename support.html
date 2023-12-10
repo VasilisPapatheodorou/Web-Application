@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Rentals</title>
+        <script src="rentals.js" ></script>
+        <link rel="stylesheet" href="style.css">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;700&display=swap" rel="stylesheet">
+    </head>
+    <body>
+        <section class="icon">
+            <a href="index.html"><img src="images/logo.png" alt="rentals_logo"></a>
+        </section>
+        <section class="header"> 
+        <nav>
+            
+            <div class="nav-links">
+                <ul>
+                    <li><a href="index.html" target="_blank">HOME</a></li>
+                    <li><a href="categories.html" target="_blank">CATEGORIES</a></li>
+                    <li><a href="about_us.html" target="_blank">ABOUT US</a></li>
+                    <li><a href="support.html" target="_blank">SUPPORT</a></li>
+                </ul>
+            </div>
+        </nav>
+
+        <section class="support">
+
+            <form action="/support.html">
+                <fieldset>
+                <legend>Personal information</legend>
+                <input type="text" name="name" placeholder="First Name" autocomplete="on" required>
+                <input type="text" name="surname" placeholder="Last Name" autocomplete="on" required>
+                <input type="email" name="email" placeholder="Email" autocomplete="on" required>
+                <input type="text" name="address" placeholder="Address" required>
+                <input type="text" name="area" placeholder="Area" list="places" required>
+                <datalist id="places">
+                    <option value="Athens"></option>
+                    <option value="Thessaloniki"></option>
+                    <option value="Chalkida"></option>
+                </datalist>
+                <input type="text" name="pcode" placeholder="Postcode" list="postcodes" autocomplete="on" required>
+                <datalist id="postcodes">
+                    <option value="15436"></option>
+                    <option value="15222"></option>
+                    <option value="17899"></option>
+                    <option value="13542"></option>
+                </datalist>
+                <input type="date" name="birthdate" title="Birth Date">
+                <input type="tel" name="phone" placeholder="Telephone" autocomplete="on" required>
+                
+                </fieldset>
+
+                <fieldset>
+                <legend>Identification information</legend>
+                <input type="text" name="username" placeholder="Username">
+                <input type="password" name="password" placeholder="Password">
+                <input type="password" name="confirm_password" placeholder="Confirm Password">
+                </fieldset>
+
+                <details>
+                    <summary><b>Contact options(Optional)</b></summary>    
+                    <input type="checkbox" name="sms" value="1"> SMS
+                    <input type="checkbox" name="email" value="1"> Email
+                    <input type="checkbox" name="viber" value="1"> Viber
+                    <input type="checkbox" name="whatsapp" value="1"> WhatsApp
+                </details>
+                
+                
+                <fieldset>
+                <legend>Please answer the following questions to help us improve our products and services</legend>
+              
+                <p>1.What kind of products or services are you most interested in?</p>
+                <input type="radio" name="product_type" value="real_estate"> Houses 
+                <input type="radio" name="product_type" value="cars"> Cars
+                <input type="radio" name="product_type" value="jobs"> Jobs
+                
+              
+                <p>2. How often do you shop online?</p>
+                <input type="radio" name="online_purchases" value="always"> Always
+                <input type="radio" name="online_purchases" value="often"> Often
+                <input type="radio" name="online_purchases" value="sometimes"> Sometimes
+                <input type="radio" name="online_purchases" value="never"> Never
+              
+                <p>3. What are the factors that influence your purchases?</p>
+                <input type="radio" name="factors[]" value="price"> Price
+                <input type="radio" name="factors[]" value="quality"> Quality
+                <input type="radio" name="factors[]" value="reviews"> Reviews
+                <input type="radio" name="factors[]" value="convenience"> Convenience
+                <input type="radio" name="factors[]" value="accessibility"> Accessibility
+                <input type="radio" name="factors[]" value="other"> Other
+          
+                <p>4. How do you receive information about new products and services?</p>
+                <input type="radio" name="information_sources[]" value="internet"> Internet
+                <input type="radio" name="information_sources[]" value="friends_and_family"> Friends and family
+                <input type="radio" name="information_sources[]" value="media"> Media
+                <input type="radio" name="information_sources[]" value="other"> Other
+              
+                <p>5. How likely are you to buy from a new website or business?</p>
+                <input type="radio" name="likelihood_of_purchase" value="very_likely"> Very likely
+                <input type="radio" name="likelihood_of_purchase" value="likely"> Likely
+                <input type="radio" name="likelihood_of_purchase" value="unlikely"> Unlikely
+                <input type="radio" name="likelihood_of_purchase" value="never"> Never
+              
+                
+                </fieldset>
+
+                <input type="submit" value="Submit">
+            </form>
+                
+        </section>
+
+        </section>
+        <footer class="footer">
+            <h3> TM &copy; 2023 - AUEB - All Rights Reserved</h3>
+         </footer>
+    </body>
+</html>
