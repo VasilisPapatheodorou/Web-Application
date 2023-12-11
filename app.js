@@ -11,6 +11,7 @@ app.listen(3000, () => {
 app.get('*', (req, res) => {
     const requestedUrl = req.url;
     const filePath = path.join(__dirname, requestedUrl);
+    console.log(requestedUrl)
 
     // Check if the file exists
     fs.access(filePath, fs.constants.F_OK, (err) => {
