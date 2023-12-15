@@ -11,14 +11,14 @@ app.listen(3000, () => {
 app.get('*', (req, res) => {
     const requestedUrl = req.url;
     const filePath = path.join(__dirname, requestedUrl);
-    console.log(requestedUrl)
 
     // Check if the file exists
     fs.access(filePath, fs.constants.F_OK, (err) => {
         if (err) {
             // File does not exist, send a 404 response
             res.status(404).send('Not Found');
-        } else {
+        } 
+        else {
             // File exists, send it
             res.sendFile(requestedUrl, { root: __dirname });
             console.log(requestedUrl)
