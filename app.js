@@ -21,6 +21,7 @@ app.get('*', (req, res) => {
         } else {
             // File exists, send it
             res.sendFile(requestedUrl, { root: __dirname });
+            console.log(requestedUrl)
         }
     });
 });

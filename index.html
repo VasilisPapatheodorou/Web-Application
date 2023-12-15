@@ -1,67 +1,176 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="images/logo.png" type="image/x-icon">
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js" type="text/javascript"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/fetch/2.0.3/fetch.min.js"></script>
   <title>Classified Ads</title>
 </head>
 <body>
-  <h1>Title:</h1>
-  <ul>
-  </ul>
+    <section class="icon">
+        <a href="index.html"><img src="images/logo.png" alt="rentals_logo"></a>
+    </section>
+    <section class="header"> 
+        <div class="icon-bar">
+            <a href="#" class="facebook"><i class="fa fa-facebook"></i></a>  <!---contact logos-->
+            <a href="#" class="twitter"><i class="fa fa-twitter"></i></a>
+            <a href="#" class="google"><i class="fa fa-google"></i></a>
+            <a href="#" class="linkedin"><i class="fa fa-linkedin"></i></a>
+            <a href="#" class="youtube"><i class="fa fa-youtube"></i></a>
+        </div>
+        <nav>
+            
+            <section class="nav-links">
+                <ul>
+                    <li><a href="index.html" target="_blank">HOME</a></li>   <!---menu--->
+                    <li><a href="categories.html" target="_blank">CATEGORIES</a></li>
+                    <li><a href="about_us.html" target="_blank">ABOUT US</a></li>
+                    <li><a href="support.html" target="_blank">SUPPORT</a></li>
+                </ul>
+            </section>
+        </nav>
+
+        <section class="categories-menu">
+            <section class="tab-titles">
+                <ul>
+                    <li id="1">
+                        <p class="tab-links active-link" onclick="opentab('houses')"><b id="house"></b></p>
+                        <ul class="dropdown">
+                            <li><b><a href="home-rentals.html" target="_blank" style="text-decoration: none; color: white;">APARTMENTS</a></b></li>
+                            <li><b>VILLAS</b></li>
+                            <li><b>PARKING</b></li>
+                        </ul>                      
+                    </li>
+                    <li id="2">
+                        <p class="tab-links" onclick="opentab('cars')"><b id="car"></b></p>    
+                        <ul class="dropdown">
+                            <li><b><a href="car-rentals.html" target="_blank" style="text-decoration: none; color: white;">SUV</a></b></li>
+                            <li><b>SPORTS</b></li>
+                            <li><b>ELECTRIC</b></li>
+                        </ul>
+                    </li>
+                    <li id="3">
+                        <p class="tab-links" onclick="opentab('work')"><b id="work"></b></p>
+                        <ul class="dropdown">
+                            <li><b>FULL TIME</b></li>
+                            <li><b>PART TIME</b></li>
+                            <li><b>INTERNSHIP</b></li>
+                        </ul>
+                    </li>
+                    <li id="4">
+                        <p class="tab-links" onclick="opentab('appliances')"><b id="app"></b></p>
+                        <ul class="dropdown">
+                            <li><b>KITCHEN</b></li>
+                            <li><b>HOUSEHOLD</b></li>
+                            <li><b>AIRCONDITION</b></li>
+                        </ul>
+                    </li>
+                </ul>
+            </section>
+            
+        </section>
+
+    </section>
+    <script> 
+        var tablinks = document.getElementsByClassName("tab-links");  //script for tabs
+        var tabcontents = document.getElementsByClassName("tab-contents");
+        function opentab(tabname) {
+            for (tablink of tablinks) {
+                tablink.classList.remove("active-link");
+            }
+            for (tabcontent of tabcontents) {
+                tabcontent.classList.remove("active-tab");
+            }
+            
+            event.currentTarget.classList.add("active-link");
+            document.getElementById(tabname).classList.add("active-tab");
+        }
+    </script>
   
-  <script>
-    fetchData('https://wiki-ads.onrender.com/categories')
-        .then(data => {
-            const ul = document.querySelector('ul');
+    <script>
+        fetchData('https://wiki-ads.onrender.com/categories')
+            .then(data => {
+                data.forEach(category => {
+                    //URL Search Parameters
+                    const obj = {
+                        id : category.id
+                    }
+                    const searchParam = new URLSearchParams(obj)
+                    const queryString = searchParam.toString()
+                    const path = `http://localhost:3000/category.html?`;
+                    const url = path + queryString
+                    // Render category title, category image and link reference
+                    const titleMarkup = `${category.title}`;
+                    const imgMarkup = `<a href="${url}"><img src="${category.img_url}"></a>`
+                    const  sub= `
+                        <li>
+                            <ul id="subcategories-${category.id}"></ul>
+                        </li>`;
+                    
+                    switch (category.id) {
+                        case 1:
+                            document.getElementById('house').insertAdjacentHTML('beforeend', titleMarkup);
+                            document.getElementById('1').insertAdjacentHTML("afterbegin", imgMarkup);
+                            
+                            break;
+                        case 2:
+                            document.getElementById('car').insertAdjacentHTML('beforeend', titleMarkup);
+                            document.getElementById('2').insertAdjacentHTML("afterbegin", imgMarkup);
+                            break;
+                        case 3:
+                            document.getElementById('work').insertAdjacentHTML('beforeend', titleMarkup);
+                            document.getElementById('3').insertAdjacentHTML("afterbegin", imgMarkup);
+                            break;
+                        case 4:
+                            document.getElementById('app').insertAdjacentHTML('beforeend', titleMarkup);
+                            document.getElementById('4').insertAdjacentHTML("afterbegin", imgMarkup);
+                            break;
+                        default:
+                            console.log('Unknown category ID:', category.id);
+                            break;
+                    }
+                    
+                    
 
-            data.forEach(category => {
-                // Render category title
-                const titleMarkup = `<li>${category.title}</li>`;
-                ul.insertAdjacentHTML('beforeend', titleMarkup);
+                    // Fetch subcategories
+                    const subcategoriesPath = `https://wiki-ads.onrender.com/categories/${category.id}/subcategories?`;
+                    fetchData(subcategoriesPath)
+                        .then(subcategories => {
+                            const subcategoriesUl = document.getElementById(`subcategories-${category.id}`);
 
-                // Render category image and link reference
-                const id = category.id;
-                const path = `category.html`;
-                const imgMarkup = `
-                    <li>
-                        <a href="${path}">
-                            <img src="${category.img_url}" ">
-                        </a>
-                        <ul id="subcategories-${id}"></ul>
-                    </li>`;
-                ul.insertAdjacentHTML('beforeend', imgMarkup);
-
-                // Fetch subcategories
-                const subcategoriesPath = `https://wiki-ads.onrender.com/ads?category=${id}`;
-                fetchData(subcategoriesPath)
-                    .then(subcategories => {
-                        const subcategoriesUl = document.getElementById(`subcategories-${id}`);
-
-                        subcategories.forEach(subcategory => {
-                            // Render subcategory title
-                            const subcategoryMarkup = `<li>${subcategory.title}</li>`;
-                            subcategoriesUl.insertAdjacentHTML('beforeend', subcategoryMarkup);
+                            subcategories.forEach(subcategory => {
+                                // Render subcategory title
+                                const subcategoryMarkup = `<li>${subcategory.title}</li>`;
+                                subcategoriesUl.insertAdjacentHTML('beforeend', subcategoryMarkup);
+                            });
                         });
-                    });
+                        
+                });
             });
-        });
 
-    function fetchData(url) {
-        return fetch(url)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`Network response was not ok (${response.status} - ${response.statusText})`);
-                }
-                return response.json();
-            })
-            .catch(error => {
-                console.error('Error fetching data:', error);
-            });
-    }
-</script>
-
-
+        function fetchData(url) {
+            return fetch(url)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`Network response was not ok (${response.status} - ${response.statusText})`);
+                    }
+                    return response.json();
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                });
+        }
+    </script>
+    <footer class="footer">
+        <h3> TM &copy; 2023 - AUEB - All Rights Reserved</h3>
+    </footer>
 </body>
 </html>

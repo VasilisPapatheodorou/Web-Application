@@ -8,36 +8,42 @@
 </head>
 <body>
   <h1>Ads for Category:</h1>
-  <ul>
+  <ul id="ads">
   </ul>
-  
+
   <script>
-   
-   
-   fetchData('https://wiki-ads.onrender.com/ads?category=1')
-    .then(data => {
-        data.forEach(category => {
-            // Render category title
-            const titleMarkup = `<li>${category.title}</li>`;
-            document.querySelector('ul').insertAdjacentHTML('beforeend', titleMarkup);
+    // Fetch ads data for the specified category
+    fetchData('https://wiki-ads.onrender.com/ads?category=1')
+      .then(data => {
+        // Render ad data for each ad in the array
+        data.forEach(ad => {
+          // Create markup for ad title and description
+          const adMarkup = `
+            <li class="ad">
+              <h2><a href="${ad.url}">${ad.title}</a></h2>
+              <p>${ad.description}</p>
+            </li>
+          `;
 
+          // Append ad markup to the ads list
+          document.getElementById('ads').insertAdjacentHTML('beforeend', adMarkup);
+
+         
         });
-    })
-
+      })
+ 
     function fetchData(url) {
-    return fetch(url)
+      return fetch(url)
         .then(response => {
-            if (!response.ok) {
-                throw new Error(`Network response was not ok (${response.status} - ${response.statusText})`);
-            }
-            return response.json();
+          if (!response.ok) {
+            throw new Error(`Network response was not ok (${response.status} - ${response.statusText})`);
+          }
+          return response.json();
         })
         .catch(error => {
-            console.error('Error fetching data:', error);
+          console.error('Error fetching data:', error);
         });
-}
-
+    }
   </script>
-
 </body>
 </html>
