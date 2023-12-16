@@ -6,4 +6,4 @@ The purpose of the project is to gain knowledge in aspects such as:
 
 - node.js
 - MongoDB
-- HTTP Request
+- APIs
