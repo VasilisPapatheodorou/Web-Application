@@ -1,176 +1,84 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" href="images/logo.png" type="image/x-icon">
-  <link rel="stylesheet" href="style.css">
+  <title>Categories and Subcategories</title>
+  <link rel="stylesheet" href="styles.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js" type="text/javascript"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/fetch/2.0.3/fetch.min.js"></script>
-  <title>Classified Ads</title>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500&family=Montserrat:wght@500;600;700&family=Source+Code+Pro:wght@200&display=swap" rel="stylesheet">
 </head>
 <body>
-    <section class="icon">
-        <a href="index.html"><img src="images/logo.png" alt="rentals_logo"></a>
-    </section>
-    <section class="header"> 
-        <div class="icon-bar">
-            <a href="#" class="facebook"><i class="fa fa-facebook"></i></a>  <!---contact logos-->
-            <a href="#" class="twitter"><i class="fa fa-twitter"></i></a>
-            <a href="#" class="google"><i class="fa fa-google"></i></a>
-            <a href="#" class="linkedin"><i class="fa fa-linkedin"></i></a>
-            <a href="#" class="youtube"><i class="fa fa-youtube"></i></a>
-        </div>
-        <nav>
-            
-            <section class="nav-links">
-                <ul>
-                    <li><a href="index.html" target="_blank">HOME</a></li>   <!---menu--->
-                    <li><a href="categories.html" target="_blank">CATEGORIES</a></li>
-                    <li><a href="about_us.html" target="_blank">ABOUT US</a></li>
-                    <li><a href="support.html" target="_blank">SUPPORT</a></li>
-                </ul>
-            </section>
-        </nav>
+  <div class="container">
+    <ul id="categoriesList"></ul>
+  </div>
 
-        <section class="categories-menu">
-            <section class="tab-titles">
-                <ul>
-                    <li id="1">
-                        <p class="tab-links active-link" onclick="opentab('houses')"><b id="house"></b></p>
-                        <ul class="dropdown">
-                            <li><b><a href="home-rentals.html" target="_blank" style="text-decoration: none; color: white;">APARTMENTS</a></b></li>
-                            <li><b>VILLAS</b></li>
-                            <li><b>PARKING</b></li>
-                        </ul>                      
-                    </li>
-                    <li id="2">
-                        <p class="tab-links" onclick="opentab('cars')"><b id="car"></b></p>    
-                        <ul class="dropdown">
-                            <li><b><a href="car-rentals.html" target="_blank" style="text-decoration: none; color: white;">SUV</a></b></li>
-                            <li><b>SPORTS</b></li>
-                            <li><b>ELECTRIC</b></li>
-                        </ul>
-                    </li>
-                    <li id="3">
-                        <p class="tab-links" onclick="opentab('work')"><b id="work"></b></p>
-                        <ul class="dropdown">
-                            <li><b>FULL TIME</b></li>
-                            <li><b>PART TIME</b></li>
-                            <li><b>INTERNSHIP</b></li>
-                        </ul>
-                    </li>
-                    <li id="4">
-                        <p class="tab-links" onclick="opentab('appliances')"><b id="app"></b></p>
-                        <ul class="dropdown">
-                            <li><b>KITCHEN</b></li>
-                            <li><b>HOUSEHOLD</b></li>
-                            <li><b>AIRCONDITION</b></li>
-                        </ul>
-                    </li>
-                </ul>
-            </section>
-            
-        </section>
+  <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
+  <script id="categories-template" type="text/x-handlebars-template">
+    {{#each categories}}
+      <li>
+        
+        <h3>{{title}}</h3>
+        <a href="/category?id={{id}}"><img src="https://wiki-ads.onrender.com/{{img_url}}" width="100"></a>
 
-    </section>
-    <script> 
-        var tablinks = document.getElementsByClassName("tab-links");  //script for tabs
-        var tabcontents = document.getElementsByClassName("tab-contents");
-        function opentab(tabname) {
-            for (tablink of tablinks) {
-                tablink.classList.remove("active-link");
-            }
-            for (tabcontent of tabcontents) {
-                tabcontent.classList.remove("active-tab");
-            }
-            
-            event.currentTarget.classList.add("active-link");
-            document.getElementById(tabname).classList.add("active-tab");
+        <ul class="subcategoriesList">
+          {{#each subcategories}}
+            <li>
+              <a href="/subcategory?id={{id}}">
+                <h4>{{title}}</h4>
+              </a>
+            </li>
+          {{/each}}
+        </ul>
+      </li>
+    {{/each}}
+  </script>
+
+  <script>
+    // Function to fetch subcategories for a category by ID
+    async function fetchSubcategories(categoryId) {
+      try {
+        const response = await fetch(`https://wiki-ads.onrender.com/categories/${categoryId}/subcategories`);
+        if (!response.ok) {
+          throw new Error(`Failed to fetch subcategories for category ID ${categoryId}`);
         }
-    </script>
-  
-    <script>
-        fetchData('https://wiki-ads.onrender.com/categories')
-            .then(data => {
-                data.forEach(category => {
-                    //URL Search Parameters
-                    const obj = {
-                        id : category.id
-                    }
-                    const searchParam = new URLSearchParams(obj)
-                    const queryString = searchParam.toString()
-                    const path = `category.html`;
-                    const url = path + queryString
-                    // Render category title, category image and link reference
-                    const titleMarkup = `${category.title}`;
-                    const imgMarkup = `<a href="${url}"><img src="${category.img_url}"></a>`
-                    const  sub= `
-                        <li>
-                            <ul id="subcategories-${category.id}"></ul>
-                        </li>`;
-                    
-                    switch (category.id) {
-                        case 1:
-                            document.getElementById('house').insertAdjacentHTML('beforeend', titleMarkup);
-                            document.getElementById('1').insertAdjacentHTML("afterbegin", imgMarkup);
-                            
-                            break;
-                        case 2:
-                            document.getElementById('car').insertAdjacentHTML('beforeend', titleMarkup);
-                            document.getElementById('2').insertAdjacentHTML("afterbegin", imgMarkup);
-                            break;
-                        case 3:
-                            document.getElementById('work').insertAdjacentHTML('beforeend', titleMarkup);
-                            document.getElementById('3').insertAdjacentHTML("afterbegin", imgMarkup);
-                            break;
-                        case 4:
-                            document.getElementById('app').insertAdjacentHTML('beforeend', titleMarkup);
-                            document.getElementById('4').insertAdjacentHTML("afterbegin", imgMarkup);
-                            break;
-                        default:
-                            console.log('Unknown category ID:', category.id);
-                            break;
-                    }
-                    
-                    
+        return response.json();
+      } catch (error) {
+        throw new Error(`Failed to fetch subcategories for category ID ${categoryId}: ${error.message}`);
+      }
+    }
 
-                    // Fetch subcategories
-                    const subcategoriesPath = `https://wiki-ads.onrender.com/categories/${category.id}/subcategories?`;
-                    fetchData(subcategoriesPath)
-                        .then(subcategories => {
-                            const subcategoriesUl = document.getElementById(`subcategories-${category.id}`);
-
-                            subcategories.forEach(subcategory => {
-                                // Render subcategory title
-                                const subcategoryMarkup = `<li>${subcategory.title}</li>`;
-                                subcategoriesUl.insertAdjacentHTML('beforeend', subcategoryMarkup);
-                            });
-                        });
-                        
-                });
-            });
-
-        function fetchData(url) {
-            return fetch(url)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`Network response was not ok (${response.status} - ${response.statusText})`);
-                    }
-                    return response.json();
-                })
-                .catch(error => {
-                    console.error('Error fetching data:', error);
-                });
+        // Fetch data for categories and their subcategories
+    fetch('https://wiki-ads.onrender.com/categories')
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
         }
-    </script>
-    <footer class="footer">
-        <h3> TM &copy; 2023 - AUEB - All Rights Reserved</h3>
-    </footer>
+        return response.json();
+      })
+      .then(async categories => {
+        // Fetch subcategories for each category using a for loop
+        for (let i = 0; i < categories.length; i++) {
+          try {
+            const subcategories = await fetchSubcategories(categories[i].id);
+            categories[i].subcategories = subcategories;
+          } catch (error) {
+            console.error(error);
+            categories[i].subcategories = []; // Assign an empty array if fetching fails
+          }
+        }
+
+        // Compile Handlebars template and render
+        const categoriesTemplate = document.getElementById('categories-template').innerHTML;
+        const compiledTemplate = Handlebars.compile(categoriesTemplate);
+        const categoriesList = document.getElementById('categoriesList');
+        categoriesList.innerHTML = compiledTemplate({ categories });
+      })
+      .catch(error => {
+        console.error('There was a problem fetching the categories:', error);
+      });
+
+  </script>
 </body>
 </html>
