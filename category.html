@@ -9,6 +9,16 @@
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500&family=Montserrat:wght@500;600;700&family=Source+Code+Pro:wght@200&display=swap" rel="stylesheet">
 </head>
 <body>
+  <div id="login-form" style="float: right;">
+    <label for="username">Username:</label>
+    <input type="text" id="username" name="username">
+    <br>
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password">
+    <br>
+    <button onclick="login()">Login</button>
+    <p id="login-message"></p>
+  </div>
   <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
 
   <!-- Define Handlebars templates -->
@@ -54,6 +64,34 @@
       .catch(error => {
         console.error('There was a problem fetching the ads:', error);
       });
+  </script>
+  <script>
+    async function login() {
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+
+      try {
+        const response = await fetch('/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ username, password }),
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          // Save the session ID (data.sessionId) locally (e.g., in localStorage)
+          console.log(data)
+          document.getElementById('login-message').textContent = 'Login successful!';
+        } else {
+          document.getElementById('login-message').textContent = 'Login failed. Please try again.';
+        }
+      } catch (error) {
+        console.error('Error during login:', error);
+      }
+  }
   </script>
 </body>
 </html>
