@@ -63,6 +63,42 @@ app.post('/login', (req, res) => {
   }
 });
 
+// Endpoint to handle storing adIds for each user
+app.post('/storeAdId', async (req, res) => {
+  const { current_user , adId } = req.body;
+
+  if (!current_user && !adId) {
+    return res.status(400).json({ error: 'Invalid request' });
+  }
+
+  try {
+    // Read the user-specific JSON file
+    const filePath = `users.json`;
+
+      try {
+        const data = await fs.readFileSync(filePath, 'utf8');
+        // Parse the JSON data
+        const users = JSON.parse(data);
+        // Find the user with the specified username
+        const targetUser = users.find(user => user.username === current_user);
+        if (targetUser) {
+          users[targetUser].favourites.adId = adId;
+          await fs.writeFile(filePath, JSON.stringify(users, null, 2));
+          res.json({ success: true });
+        } else {
+          // User not found
+          console.log(`User '${current_user}' not found.`);
+          return null;
+        }
+      } catch (error) {
+        console.error('Error reading the file:', error.message);
+        return null;
+      }
+  } catch (error) {
+    console.error('Error storing adId:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
 
 // Start the server and listen on port 3000
 const PORT = 3000;

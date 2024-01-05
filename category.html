@@ -28,7 +28,7 @@
       {{#each ads}}
         <li>
           <h3>{{title}}</h3>
-          <button class="plus-button" onclick="handleButtonClick()">+</button>
+          <button class="plus-button" data-id="{{id}}" onclick="handleButtonClick(this)">+</button>
           <p>{{description}}</p>
           {{#each images}}
           <img src="https://wiki-ads.onrender.com/{{this}}" width="300">
@@ -68,6 +68,8 @@
   </script>
   <!-- Form script -->
   <script>
+    let sessionId = null; // Variable to store the session ID
+    let current_user = null;
     async function login() {
       const username = document.getElementById('username').value;
       const password = document.getElementById('password').value;
@@ -84,10 +86,12 @@
         const data = await response.json();
 
         if (response.ok) {
-          // Save the session ID (data.sessionId) locally (e.g., in localStorage)
+          sessionId = data.sessionId;
+          current_user = data.username;
           console.log(data)
           document.getElementById('login-message').textContent = 'Login successful!';
         } else {
+
           document.getElementById('login-message').textContent = 'Login failed. Please try again.';
         }
       } catch (error) {
@@ -98,9 +102,37 @@
   <!-- Button script -->
   <script>
     // Define a function to handle button click
-    function handleButtonClick() {
-      // Add your button click logic here
-      alert('Button clicked!');
+    async function handleButtonClick(button) {
+      // Check if the session ID is set
+      if (sessionId !== null) {
+        // Retrieve the ad ID from the data-id attribute
+        const adId = button.dataset.id;
+        // Log or use the ad ID as needed
+        console.log('Clicked Ad ID:', adId);
+        try {
+          // Send a request to the server to store the adId
+          const response = await fetch('/storeAdId', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ current_user, adId }),
+          });
+
+          const data = await response.json();
+
+          if (response.ok) {
+            console.log('AdId stored successfully:', adId);
+          } else {
+            console.error('Error storing adId:', data.error);
+          }
+        } catch (error) {
+          console.error('Error storing adId:', error);
+        }
+      } else {
+        // User is not logged in, show a message or redirect to the login page
+        alert('You need to log in to perform this action.');
+      }
     }
   </script>
 </body>

@@ -1,0 +1,12 @@
+[
+  {
+    "username": "user1",
+    "hashedPassword": "$2b$10$eQpgHG9pCvmZR9iVdMw75edQlP7VOYo4.jxi1jZylzUaShLTsFaqW",
+    "favourites": {}
+  },
+  {
+    "username": "user2",
+    "hashedPassword": "$2b$10$WiObqHLatxzMzOSTTF6Y2et2VNoGeCaYu6DJNknRIN1wX0M4o8aHK",
+    "favourites": {}
+  }
+]
