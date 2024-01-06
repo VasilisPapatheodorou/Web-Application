@@ -93,8 +93,7 @@
         if (response.ok) {
           sessionId = data.sessionId;
           current_user = data.username;
-          console.log(data)
-          document.getElementById('login-message').textContent = 'Login successful!';
+          document.getElementById('login-message').innerHTML = `<span>Login successful!</span><a href='/favourite-ads?username=${current_user}&sessionId=${sessionId}'>See Favourites</a>`
         } else {
 
           document.getElementById('login-message').textContent = 'Login failed. Please try again.';
@@ -115,10 +114,14 @@
         const add_title = button.dataset.title;
         const add_desc = button.dataset.desc
         const add_cost = button.dataset.cost
-        const add_image = button.dataset.img_url
+        const image = button.dataset.img_url
+        const index= image.indexOf(',')
+        const add_image = image.substring(0,index)
         // Log or use the ad ID as needed
         console.log(adId,add_title,add_desc,add_image,add_cost)
         console.log('Clicked Ad ID:', adId);
+        body = JSON.stringify({ current_user, adId, add_title, add_desc, add_cost, add_image, sessionId})
+        console.log(body)
         try {
           // Send a request to the server to store the adId
           const response = await fetch('/storeAdId', {
@@ -126,7 +129,8 @@
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ current_user, adId, add_title, add_desc, add_cost, add_image, sessionId}),
+            body: JSON.stringify({ current_user, adId, add_title, add_desc, add_cost, add_image, sessionId})
+            
           });
 
           const data = await response.json();
@@ -134,7 +138,7 @@
           if (response.ok) {
             console.log('AdId stored successfully:', adId);
           } else {
-            console.error('Error storing adId:', data.error);
+            console.log(data.error);
           }
         } catch (error) {
           console.error('Error storing adId:', error);

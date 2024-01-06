@@ -38,6 +38,10 @@ app.get('/subcategory',(req,res) => {
   res.sendFile(path.join(__dirname, 'subcategory.html'))
 })
 
+app.get('/favourite-ads',(req,res) => {
+  res.sendFile(path.join(__dirname, 'favourite-ads.html'))
+})
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -68,8 +72,8 @@ const writeFileAsync = util.promisify(fs.writeFile);
 
 // Endpoint to handle storing adIds for each user
 app.post('/storeAdId', async (req, res) => {
-  const { current_user , adId, title, desc, cost, url, sessionId } = req.body;
-  console.log(adId,title,desc,url,cost)
+  const { current_user , adId, add_title, add_desc, add_cost, add_image, sessionId } = req.body;
+  console.log(adId,add_title,add_desc,add_title,add_cost,add_title)
   if (!current_user && !adId) {
     return res.status(400).json({ error: 'Invalid request' });
   }
@@ -90,15 +94,14 @@ app.post('/storeAdId', async (req, res) => {
         const isDuplicate = users[targetUserIndex].favourites.some(item => item.adId === adId);
         if (!isDuplicate){
           // Add the adId to the favourites
-          const add={adId, title, desc, cost, url, sessionId}
+          const add={adId, add_title, add_desc, add_cost, add_image, sessionId}
           users[targetUserIndex].favourites.push(add)
           // Write the updated data back to the file
           await writeFileAsync(filePath, JSON.stringify(users, null, 2), 'utf8');
           res.json({ success: true });
         } else {
           // Duplicate found, handle accordingly (e.g., send a response or log a message)
-          console.log(`Duplicate adId (${adId}) found in favourites for user '${current_user}'.`);
-          res.json({ error: 'Duplicate adId found.' });
+          return res.status(409).json({ error: `Add already in favourites` });
         }
       } else {
         // User not found
