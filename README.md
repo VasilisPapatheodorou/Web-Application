@@ -11,7 +11,7 @@ Frontend: HTML, CSS, JavaScript, Handlebars.js
 Backend: Node.js, Express.js
 API: External API for fetching category, subcategory, and ad data
 
-###Project Structure:
+### Project Structure:
   Server Script: The main server script is built using Express.js. It serves static files, handles different routes, and manages user authentication and ad-related operations.
 
   Data Storage: User data, including hashed passwords and favorites, is stored in a JSON file (users.json). Advertisements are fetched from external API endpoints.
