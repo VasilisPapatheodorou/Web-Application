@@ -28,7 +28,12 @@
       {{#each ads}}
         <li>
           <h3>{{title}}</h3>
-          <button class="plus-button" data-id="{{id}}" onclick="handleButtonClick(this)">+</button>
+          <button class="plus-button" 
+            data-id="{{id}}" 
+            data-title="{{title}}" 
+            data-desc="{{description}}"
+            data-cost="{{cost}}"
+            data-img_url="{{images}}" onclick="handleButtonClick(this)">+</button>
           <p>{{description}}</p>
           {{#each images}}
           <img src="https://wiki-ads.onrender.com/{{this}}" width="300">
@@ -107,7 +112,12 @@
       if (sessionId !== null) {
         // Retrieve the ad ID from the data-id attribute
         const adId = button.dataset.id;
+        const add_title = button.dataset.title;
+        const add_desc = button.dataset.desc
+        const add_cost = button.dataset.cost
+        const add_image = button.dataset.img_url
         // Log or use the ad ID as needed
+        console.log(adId,add_title,add_desc,add_image,add_cost)
         console.log('Clicked Ad ID:', adId);
         try {
           // Send a request to the server to store the adId
@@ -116,7 +126,7 @@
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ current_user, adId }),
+            body: JSON.stringify({ current_user, adId, add_title, add_desc, add_cost, add_image, sessionId}),
           });
 
           const data = await response.json();

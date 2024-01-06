@@ -5,6 +5,7 @@ const uuidv4 = require('uuid').v4;
 const fs = require('fs');
 const bcrypt = require('bcrypt');
 const app = express();
+const util = require('util');
 
 // Serve static files from the 'views' directory
 app.use(express.static(path.join(__dirname, '/')));
@@ -63,37 +64,51 @@ app.post('/login', (req, res) => {
   }
 });
 
+const writeFileAsync = util.promisify(fs.writeFile);
+
 // Endpoint to handle storing adIds for each user
 app.post('/storeAdId', async (req, res) => {
-  const { current_user , adId } = req.body;
-
+  const { current_user , adId, title, desc, cost, url, sessionId } = req.body;
+  console.log(adId,title,desc,url,cost)
   if (!current_user && !adId) {
     return res.status(400).json({ error: 'Invalid request' });
   }
 
   try {
     // Read the user-specific JSON file
-    const filePath = `users.json`;
+    const filePath = `./users.json`;
 
-      try {
-        const data = await fs.readFileSync(filePath, 'utf8');
-        // Parse the JSON data
-        const users = JSON.parse(data);
-        // Find the user with the specified username
-        const targetUser = users.find(user => user.username === current_user);
-        if (targetUser) {
-          users[targetUser].favourites.adId = adId;
-          await fs.writeFile(filePath, JSON.stringify(users, null, 2));
+    try {
+      // Read the file asynchronously
+      const data = await fs.promises.readFile(filePath, 'utf8');
+      // Parse the JSON data
+      const users = JSON.parse(data);
+      // Find the user with the specified username
+      const targetUserIndex = users.findIndex(user => user.username === current_user);
+      if (targetUserIndex !== -1) {
+        // Check for duplicate adId in the favourites array
+        const isDuplicate = users[targetUserIndex].favourites.some(item => item.adId === adId);
+        if (!isDuplicate){
+          // Add the adId to the favourites
+          const add={adId, title, desc, cost, url, sessionId}
+          users[targetUserIndex].favourites.push(add)
+          // Write the updated data back to the file
+          await writeFileAsync(filePath, JSON.stringify(users, null, 2), 'utf8');
           res.json({ success: true });
         } else {
-          // User not found
-          console.log(`User '${current_user}' not found.`);
-          return null;
+          // Duplicate found, handle accordingly (e.g., send a response or log a message)
+          console.log(`Duplicate adId (${adId}) found in favourites for user '${current_user}'.`);
+          res.json({ error: 'Duplicate adId found.' });
         }
-      } catch (error) {
-        console.error('Error reading the file:', error.message);
-        return null;
+      } else {
+        // User not found
+        console.log(`User '${current_user}' not found.`);
+        return res.status(404).json({ error: `User '${current_user}' not found.` });
       }
+    } catch (error) {
+      console.error('Error reading or writing the file:', error.message);
+      return res.status(500).json({ error: 'Internal server error' });
+    }
   } catch (error) {
     console.error('Error storing adId:', error);
     res.status(500).json({ error: 'Internal server error' });

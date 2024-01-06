@@ -2,7 +2,20 @@
   {
     "username": "user1",
     "hashedPassword": "$2b$10$eQpgHG9pCvmZR9iVdMw75edQlP7VOYo4.jxi1jZylzUaShLTsFaqW",
-    "favourites": {}
+    "favourites": [
+      {
+        "adId": "9",
+        "sessionId": "26622102-3fbf-49af-9f48-f65267eceb3e"
+      },
+      {
+        "adId": "1",
+        "sessionId": "2f8b5d3d-c850-42cf-9544-f3ab5b8f988c"
+      },
+      {
+        "adId": "2",
+        "sessionId": "2f8b5d3d-c850-42cf-9544-f3ab5b8f988c"
+      }
+    ]
   },
   {
     "username": "user2",

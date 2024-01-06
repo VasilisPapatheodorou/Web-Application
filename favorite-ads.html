@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500&family=Montserrat:wght@500;600;700&family=Source+Code+Pro:wght@200&display=swap" rel="stylesheet">
+    <title>Document</title>
+</head>
+<body>
+    <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
+    <script id="ads-template" type="text/x-handlebars-template">
+        <h1>Favourite Ads for {{username}}</h1>
+        <ul id="adsList">
+          {{#each ads}}
+            <li>
+              <h3>{{title}}</h3>
+              <p>{{description}}</p>
+              {{#each images}}
+              <img src="https://wiki-ads.onrender.com/{{this}}" width="300">
+              {{/each}}
+              <p>Τιμη: {{cost}} €</p>
+            </li>
+          {{/each}}
+        </ul>
+    </script>
+
+</body>
+</html>
