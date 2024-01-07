@@ -21,7 +21,7 @@ const generateUsersJson = async () => {
     users.map(async (user) => ({
       username: user.username,
       hashedPassword: await hashPassword(user.password),
-      favourites:{}
+      favourites:[]
     }))
   );
 

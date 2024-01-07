@@ -73,7 +73,6 @@ const writeFileAsync = util.promisify(fs.writeFile);
 // Endpoint to handle storing adIds for each user
 app.post('/storeAdId', async (req, res) => {
   const { current_user , adId, add_title, add_desc, add_cost, add_image, sessionId } = req.body;
-  console.log(adId,add_title,add_desc,add_title,add_cost,add_title)
   if (!current_user && !adId) {
     return res.status(400).json({ error: 'Invalid request' });
   }
@@ -98,7 +97,7 @@ app.post('/storeAdId', async (req, res) => {
           users[targetUserIndex].favourites.push(add)
           // Write the updated data back to the file
           await writeFileAsync(filePath, JSON.stringify(users, null, 2), 'utf8');
-          res.json({ success: true });
+          return res.status(200).json({success:true})
         } else {
           // Duplicate found, handle accordingly (e.g., send a response or log a message)
           return res.status(409).json({ error: `Add already in favourites` });

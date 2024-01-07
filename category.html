@@ -118,10 +118,7 @@
         const index= image.indexOf(',')
         const add_image = image.substring(0,index)
         // Log or use the ad ID as needed
-        console.log(adId,add_title,add_desc,add_image,add_cost)
-        console.log('Clicked Ad ID:', adId);
-        body = JSON.stringify({ current_user, adId, add_title, add_desc, add_cost, add_image, sessionId})
-        console.log(body)
+        
         try {
           // Send a request to the server to store the adId
           const response = await fetch('/storeAdId', {
@@ -136,12 +133,13 @@
           const data = await response.json();
 
           if (response.ok) {
-            console.log('AdId stored successfully:', adId);
+            console.log('Ad stored successfully:', adId);
+
           } else {
             console.log(data.error);
           }
         } catch (error) {
-          console.error('Error storing adId:', error);
+          console.error('Error storing Ad:', error);
         }
       } else {
         // User is not logged in, show a message or redirect to the login page
